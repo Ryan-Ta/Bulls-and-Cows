@@ -88,9 +88,17 @@ bool UBullCowCartridge::IsIsogram(FString word) const{
 //Checks to see if a word is valid from the words list and puts it into the ValidWords array
 TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const{
     TArray<FString> ValidWords;
-    for (int32 i = 0; i < WordList.Num(); i++) {
+    /*for (int32 i = 0; i < WordList.Num(); i++) {
         if (Words[i].Len() >= 4 && WordList[i].Len() <= 8 && IsIsogram(WordList[i])) {
             ValidWords.Emplace(WordList[i]); //Emplace used for FStrings to add to another array
+        }
+    }*/
+    //For Each Loop version (Range based for loop). Used for iterating through a collection of something
+    //Equivalent to the for loop above
+    //Word is just the variable name. Checks each element in WordList and assigns it to Word to be checked
+    for (FString Word : WordList) {
+        if (Word.Len() >= 4 && Word.Len() <= 8 && IsIsogram(Word)) {
+            ValidWords.Emplace(Word); //Emplace used for FStrings to add to another array
         }
     }
     return ValidWords;
