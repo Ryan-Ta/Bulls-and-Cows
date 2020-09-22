@@ -19,6 +19,7 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	void ProcessGuess(const FString& guess);
 	bool IsIsogram(const FString& word) const;
 	TArray<FString> GetValidWords(const TArray<FString>& WordList) const;
+	void GetBullCows(const FString& guess, int32& bullCount, int32& cowCount) const;//Out parameters are referenced but not const. bullCount and cowCount are examples of that
 
 	// Your declarations go below!
 	private:

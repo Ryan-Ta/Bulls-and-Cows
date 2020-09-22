@@ -65,7 +65,7 @@ void UBullCowCartridge::ProcessGuess(const FString& guess) {
         return;
     }
     //Decrementing a life
-    PrintLine(TEXT("Lost a life :(\n"));
+    PrintLine(TEXT("Lost a life :("));
     --lives;
     PrintLine(TEXT("You have %i lives."), lives);
     //Lose condition
@@ -76,6 +76,11 @@ void UBullCowCartridge::ProcessGuess(const FString& guess) {
         EndGame();
         return;
     }
+    //Show the player Bulls and Cows
+    int32 bulls, cows;
+    GetBullCows(guess, bulls, cows);
+    PrintLine(TEXT("You have %i Bulls and %i Cows\n"), bulls, cows);
+
 }
 
 //Checks whether or not the word guessed is an isogram
@@ -107,4 +112,25 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
         }
     }
     return ValidWords;
+}
+
+//Letter in a guess and right place is a Bull
+//Letter in a guess but wrong place is a Cow
+void UBullCowCartridge::GetBullCows(const FString& guess,int32& bullCount,int32& cowCount)const{
+    bullCount = 0;
+    cowCount = 0;
+
+    for (int32 i = 0; i < guess.Len(); i++) {
+        if (guess[i] == hiddenWord[i]) {
+            bullCount++;
+            continue; //tells the outer for loop to increment and go on to the next iteration
+        }
+
+        for (int32 j = 0; j < hiddenWord.Len(); j++) {
+            if (guess[i] == hiddenWord[j]) {
+                cowCount++;
+                break;
+            }
+        }
+    }
 }
