@@ -5,6 +5,8 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
+    FBullCowCount count;
+    
     Isograms = GetValidWords(Words);
     InitGame(); //setup the game
 
@@ -35,7 +37,7 @@ void UBullCowCartridge::InitGame() {
     PrintLine(TEXT("Guess the %i letter word!"), hiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), lives);
     PrintLine(TEXT("Press tab, type in your guess,\n and press enter."));
-    PrintLine(TEXT("The hidden word is: %s"), *hiddenWord);
+    //PrintLine(TEXT("The hidden word is: %s"), *hiddenWord);
 
 }
 
@@ -77,9 +79,14 @@ void UBullCowCartridge::ProcessGuess(const FString& guess) {
         return;
     }
     //Show the player Bulls and Cows
+    /* out parameter method of counting bulls and cows
     int32 bulls, cows;
     GetBullCows(guess, bulls, cows);
     PrintLine(TEXT("You have %i Bulls and %i Cows\n"), bulls, cows);
+    */
+    //Using structs to update the bull and cow count
+    FBullCowCount score = GetBullCows(guess);
+    PrintLine(TEXT("You have %i Bulls and %i Cows\n"), score.bulls, score.cows);
 
 }
 
@@ -116,16 +123,41 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 
 //Letter in a guess and right place is a Bull
 //Letter in a guess but wrong place is a Cow
+//boi loi 2 bulls, 1 cow
+//Using Structs to update and store the bull and cow count
+FBullCowCount UBullCowCartridge::GetBullCows(const FString& guess) const {
+    FBullCowCount count;
+
+    for (int32 i = 0; i < guess.Len(); i++) {
+        //Right letter in the right place
+        if (guess[i] == hiddenWord[i]) {
+            count.bulls++;
+            continue; //tells the outer for loop to increment and go on to the next iteration
+        }
+        //Right letter in the wrong place
+        for (int32 j = 0; j < hiddenWord.Len(); j++) {
+            if (guess[i] == hiddenWord[j]) {
+                count.cows++;
+                break;
+            }
+        }
+    }
+    return count;
+}
+
+/*
+* Using out parameters to calculate bulls and cows
 void UBullCowCartridge::GetBullCows(const FString& guess,int32& bullCount,int32& cowCount)const{
     bullCount = 0;
     cowCount = 0;
 
     for (int32 i = 0; i < guess.Len(); i++) {
+        //Right letter in the right place
         if (guess[i] == hiddenWord[i]) {
             bullCount++;
             continue; //tells the outer for loop to increment and go on to the next iteration
         }
-
+        //Right letter in the wrong place
         for (int32 j = 0; j < hiddenWord.Len(); j++) {
             if (guess[i] == hiddenWord[j]) {
                 cowCount++;
@@ -134,3 +166,4 @@ void UBullCowCartridge::GetBullCows(const FString& guess,int32& bullCount,int32&
         }
     }
 }
+*/
